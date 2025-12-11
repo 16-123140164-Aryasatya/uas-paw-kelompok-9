@@ -1,5 +1,5 @@
 from pyramid.config import Configurator
-
+from . import models
 
 def main(global_config, **settings):
     """ This function returns a Pyramid WSGI application.
@@ -8,5 +8,5 @@ def main(global_config, **settings):
         config.include('pyramid_jinja2')
         config.include('.routes')
         config.include('.models')
-        config.scan()
+        config.scan('.views')
     return config.make_wsgi_app()

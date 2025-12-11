@@ -1,31 +1,53 @@
 from pyramid.view import view_config
 from pyramid.response import Response
 from sqlalchemy.exc import SQLAlchemyError
+from ..models.mymodel import MyModel
 
 from .. import models
 
 
-@view_config(route_name='home', renderer='Tubes_PAW_RB_7:templates/mytemplate.jinja2')
-def my_view(request):
+# HOME → JSON
+@view_config(route_name='home', renderer='json')
+def home(request):
+    return {"message": "Backend Pyramid berjalan!"}
+
+
+# GET ALL DATA FROM TABLE MODELS
+@view_config(route_name='get_models', renderer='json')
+def get_models(request):
     try:
-        query = request.dbsession.query(models.MyModel)
-        one = query.filter(models.MyModel.name == 'one').one()
+        query = request.dbsession.query(MyModel).all()
+        result = [
+            {
+                "id": m.id,
+                "name": m.name,
+                "value": m.value
+            }
+            for m in query
+        ]
+        return {"status": "success", "data": result}
+
     except SQLAlchemyError:
-        return Response(db_err_msg, content_type='text/plain', status=500)
-    return {'one': one, 'project': 'backend'}
+        return {"status": "error", "message": "Database error"}
 
 
-db_err_msg = """\
-Pyramid is having a problem using your SQL database.  The problem
-might be caused by one of the following things:
+# REGISTER API (contoh)
+@view_config(route_name='register', request_method='POST', renderer='json')
+def register(request):
+    try:
+        data = request.json_body
 
-1.  You may need to initialize your database tables with `alembic`.
-    Check your README.txt for descriptions and try to run it.
+        username = data.get("username")
+        password = data.get("password")
+        email = data.get("email")
 
-2.  Your database server may not be running.  Check that the
-    database server referred to by the "sqlalchemy.url" setting in
-    your "development.ini" file is running.
+        if not username or not password or not email:
+            return {"status": "error", "message": "Field tidak lengkap"}
 
-After you fix the problem, please restart the Pyramid application to
-try it again.
-"""
+        user = MyModel(name=username, value=0)
+        request.dbsession.add(user)
+
+        return {"status": "success", "message": "Register berhasil"}
+
+    except Exception as e:
+        return {"status": "error", "message": str(e)}
