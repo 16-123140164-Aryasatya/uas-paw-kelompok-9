@@ -1,3 +1,5 @@
+from pyramid.response import Response
+
 def includeme(config):
     """Configure routes"""
     
@@ -20,3 +22,7 @@ def includeme(config):
     config.add_route('borrowings_create', '/api/borrowings/borrow')
     config.add_route('borrowings_return', '/api/borrowings/{id}/return')
     config.add_route('borrowings_history', '/api/borrowings/history')
+    
+    # Root route
+    config.add_route('root', '/')
+    config.add_view(lambda request: Response('Welcome to the Library API!'), route_name='root')
