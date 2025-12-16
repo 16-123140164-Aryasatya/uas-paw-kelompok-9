@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 
@@ -13,6 +13,7 @@ import { setToken } from "./api/api";
 
 export default function App() {
   const [user, setUser] = useState(null);
+  const location = useLocation();
 
   // Load user dari localStorage saat pertama kali render
   useEffect(() => {
@@ -33,9 +34,12 @@ export default function App() {
     }
   }, []);
 
+  // Hide navbar on login and register pages
+  const hideNavbar = location.pathname === "/login" || location.pathname === "/register";
+
   return (
     <>
-      <Navbar user={user} setUser={setUser} />
+      {!hideNavbar && <Navbar user={user} setUser={setUser} />}
 
       <Routes>
         <Route path="/" element={<Books />} />
