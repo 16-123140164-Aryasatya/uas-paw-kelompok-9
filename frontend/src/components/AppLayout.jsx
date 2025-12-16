@@ -9,6 +9,7 @@ import Inventory from "../pages/librarian/Inventory";
 import BorrowRequests from "../pages/librarian/BorrowRequests";
 import Transactions from "../pages/librarian/Transactions";
 import Members from "../pages/librarian/Members";
+import UserProfile from "../../ui_user/user_profile";
 
 export default function AppLayout() {
   return (
@@ -23,6 +24,7 @@ export default function AppLayout() {
             <Route path="/requests" element={<BorrowRequests />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/members" element={<Members />} />
+            <Route path="/user/profile" element={<UserProfile />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
