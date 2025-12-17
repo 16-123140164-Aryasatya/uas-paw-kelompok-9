@@ -1,6 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { AuthAPI } from "../api/endpoints";
-import { normalizeError, setAuthToken } from "../api/client";
+import React, { createContext, useContext, useEffect, useState } from "react";
 
 const Ctx = createContext(null);
 
@@ -19,53 +17,53 @@ export function AuthProvider({ children }) {
   });
   const [loading, setLoading] = useState(false);
 
-  // set axios auth header whenever token changes
+  // Save token to localStorage
   useEffect(() => {
-    setAuthToken(token || "");
-    if (token) localStorage.setItem(LS_TOKEN, token);
-    else localStorage.removeItem(LS_TOKEN);
+    if (token) {
+      localStorage.setItem(LS_TOKEN, token);
+    } else {
+      localStorage.removeItem(LS_TOKEN);
+    }
   }, [token]);
 
+  // Save user to localStorage
   useEffect(() => {
-    if (user) localStorage.setItem(LS_USER, JSON.stringify(user));
-    else localStorage.removeItem(LS_USER);
+    if (user) {
+      localStorage.setItem(LS_USER, JSON.stringify(user));
+    } else {
+      localStorage.removeItem(LS_USER);
+    }
   }, [user]);
 
   const isAuthenticated = !!token;
 
+  // Frontend-only login untuk testing (tanpa backend)
   async function login(payload) {
     setLoading(true);
+    
+    // Simulasi delay seperti API call
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
     try {
-      const res = await AuthAPI.login(payload);
-      // asumsi backend balikin { token, user: { name, role } }
-      const nextToken = res.data?.token || "";
-      const nextUser = res.data?.user || { name: payload.email || "Librarian", role: "librarian" };
+      const { email, role, name } = payload;
+      
+      // Generate mock token
+      const mockToken = `mock_token_${Date.now()}`;
+      
+      const userData = {
+        id: Date.now().toString(),
+        email: email || `${role}@library.com`,
+        name: name || (role === 'user' ? 'Member Perpustakaan' : 'Staf Perpustakaan'),
+        role, // 'user' atau 'librarian'
+        loginTime: new Date().toISOString()
+      };
 
-      setTokenState(nextToken);
-      setUser(nextUser);
+      setTokenState(mockToken);
+      setUser(userData);
 
       return { ok: true };
     } catch (e) {
-      return { ok: false, message: normalizeError(e) };
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  async function register(payload) {
-    setLoading(true);
-    try {
-      const res = await AuthAPI.register(payload);
-      // kalau register auto-login: { token, user }
-      const nextToken = res.data?.token || "";
-      const nextUser = res.data?.user || { name: payload.name || "User", role: "member" };
-
-      if (nextToken) setTokenState(nextToken);
-      setUser(nextUser);
-
-      return { ok: true };
-    } catch (e) {
-      return { ok: false, message: normalizeError(e) };
+      return { ok: false, message: 'Login gagal' };
     } finally {
       setLoading(false);
     }
@@ -74,13 +72,21 @@ export function AuthProvider({ children }) {
   function logout() {
     setTokenState("");
     setUser(null);
-    setAuthToken("");
   }
 
-  const value = useMemo(
-    () => ({ token, user, isAuthenticated, loading, login, register, logout }),
-    [token, user, isAuthenticated, loading]
-  );
+  const hasRole = (requiredRole) => {
+    return user && user.role === requiredRole;
+  };
+
+  const value = {
+    token,
+    user,
+    isAuthenticated,
+    loading,
+    login,
+    logout,
+    hasRole
+  };
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
