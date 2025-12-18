@@ -52,34 +52,34 @@ export default function AppLayout() {
               </ProtectedRoute>
             } />
 
-            {/* User Routes - hanya untuk role 'user' */}
+            {/* User Routes - hanya untuk role 'member' */}
             <Route path="/user/profile" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <UserProfile />
               </ProtectedRoute>
             } />
             <Route path="/user/dashboard" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <UserDashboard />
               </ProtectedRoute>
             } />
             <Route path="/user/history" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <HistoryBorrow />
               </ProtectedRoute>
             } />
             <Route path="/user/catalog" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <Catalog />
               </ProtectedRoute>
             } />
             <Route path="/user/borrow" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <BorrowUser />
               </ProtectedRoute>
             } />
             <Route path="/user/book/:id" element={
-              <ProtectedRoute requiredRole="user">
+              <ProtectedRoute requiredRole="member">
                 <BookDetail />
               </ProtectedRoute>
             } />
