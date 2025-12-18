@@ -9,17 +9,18 @@ export default function Login({ setUser }) {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [authMode, setAuthMode] = useState("signin");
 
   const submit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
     try {
-      const res = await API.post("/api/login", { email, password });
-      localStorage.setItem("user", JSON.stringify(res.data.user));
-      localStorage.setItem("token", res.data.token);
-      setToken(res.data.token);
-      setUser(res.data.user);
+      const res = await API.post("/api/auth/login", { email, password });
+      localStorage.setItem("user", JSON.stringify(res.data.data.user));
+      localStorage.setItem("token", res.data.data.token);
+      setToken(res.data.data.token);
+      setUser(res.data.data.user);
       navigate("/");
     } catch {
       setError("Invalid email or password");
@@ -31,36 +32,60 @@ export default function Login({ setUser }) {
   return (
     <div className="flex min-h-screen w-full flex-col lg:flex-row">
       {/* Left Section: Form */}
-      <div className="flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-20 xl:px-32 bg-surface-light dark:bg-background-dark">
+      <div className="flex w-full flex-col justify-center px-6 py-8 lg:w-1/2 lg:px-16 xl:px-24 bg-surface-light dark:bg-background-dark">
         {/* Header / Logo */}
-        <div className="flex items-center gap-2 mb-10">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary flex-shrink-0">
+        <div className="flex items-center gap-2 mb-8">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <span className="material-symbols-outlined text-2xl">local_library</span>
           </div>
-          <h2 className="text-2xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark whitespace-nowrap">Librarizz</h2>
+          <h2 className="text-xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark">Librarizz</h2>
         </div>
 
         {/* Segmented Control (Login / Register Toggle) */}
-        <div className="mb-8 w-full max-w-md">
-          <div className="flex h-12 w-full items-center justify-center rounded-xl bg-background-light dark:bg-surface-dark p-1 border border-border-light dark:border-border-dark">
-            <div className="group relative flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg bg-white dark:bg-background-dark text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10 px-4 text-sm font-semibold transition-all">
+        <div className="mb-6 w-full max-w-md">
+          <div className="flex h-10 w-full items-center justify-center rounded-xl bg-background-light dark:bg-surface-dark p-1 border border-border-light dark:border-border-dark">
+            <label className="group relative flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg bg-white dark:bg-background-dark text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10 px-4 text-sm font-semibold transition-all">
               <span className="truncate">Sign In</span>
-            </div>
-            <Link to="/register" className="group flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg px-4 text-sm font-semibold transition-all hover:text-text-main-light dark:hover:text-white text-text-sub-light dark:text-text-sub-dark">
+              <input
+                checked={authMode === "signin"}
+                onChange={() => setAuthMode("signin")}
+                className="sr-only"
+                name="auth-toggle"
+                type="radio"
+                value="signin"
+              />
+            </label>
+            <label className="group flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg px-4 text-sm font-semibold transition-all hover:text-text-main-light dark:hover:text-white text-text-sub-light dark:text-text-sub-dark">
               <span className="truncate">Register</span>
-            </Link>
+              <input
+                checked={authMode === "register"}
+                onChange={() => {
+                  setAuthMode("register");
+                  navigate("/register");
+                }}
+                className="sr-only"
+                name="auth-toggle"
+                type="radio"
+                value="register"
+              />
+            </label>
           </div>
         </div>
 
         {/* Main Content Area */}
         <div className="max-w-md w-full">
           {/* Headings */}
-          <div className="mb-8 space-y-2">
-            <h1 className="text-3xl font-extrabold leading-tight tracking-tight text-text-main-light dark:text-white sm:text-4xl">Welcome Back 👋</h1>
-            <p className="text-base font-normal text-text-sub-light dark:text-text-sub-dark">Login to your account and continue exploring.</p>
+          <div className="mb-6 space-y-1">
+            <h1 className="text-2xl font-extrabold leading-tight tracking-tight text-text-main-light dark:text-white sm:text-3xl">
+              Welcome back
+            </h1>
+            <p className="text-sm font-normal text-text-sub-light dark:text-text-sub-dark">
+              Please enter your details to sign in.
+            </p>
           </div>
 
           {/* Login Form */}
-          <form onSubmit={submit} className="space-y-6">
+          <form onSubmit={submit} className="space-y-5">
             {/* Error Message */}
             {error && (
               <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-4">
@@ -69,7 +94,7 @@ export default function Login({ setUser }) {
             )}
 
             {/* Input Fields */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               {/* Email Input */}
               <div className="space-y-2">
                 <label className="text-sm font-semibold leading-none text-text-main-light dark:text-text-main-dark" htmlFor="email">
@@ -79,10 +104,10 @@ export default function Login({ setUser }) {
                   <input
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="flex h-12 w-full rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark px-4 py-2 text-base text-text-main-light dark:text-white placeholder:text-text-sub-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                    className="flex h-10 w-full rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark px-3 py-2 text-sm text-text-main-light dark:text-white placeholder:text-text-sub-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                    id="email"
                     placeholder="you@library.os"
                     type="email"
-                    id="email"
                     required
                   />
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-text-sub-light">
@@ -100,10 +125,10 @@ export default function Login({ setUser }) {
                   <input
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="flex h-12 w-full rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark px-4 py-2 text-base text-text-main-light dark:text-white placeholder:text-text-sub-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                    className="flex h-10 w-full rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark px-3 py-2 text-sm text-text-main-light dark:text-white placeholder:text-text-sub-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors"
+                    id="password"
                     placeholder="••••••••"
                     type={showPassword ? "text" : "password"}
-                    id="password"
                     required
                   />
                   <button
@@ -120,7 +145,7 @@ export default function Login({ setUser }) {
             </div>
 
             {/* Remember & Forgot */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between pt-2">
               <div className="flex items-center space-x-2">
                 <input
                   className="h-4 w-4 rounded border-border-light text-primary focus:ring-primary dark:border-border-dark dark:bg-surface-dark"
@@ -139,7 +164,7 @@ export default function Login({ setUser }) {
             {/* Submit Button */}
             <button
               disabled={loading}
-              className="inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-base font-bold text-white shadow-md transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              className="inline-flex h-10 w-full items-center justify-center whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-sm font-bold text-white shadow-md transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               type="submit"
             >
               {loading ? "Signing in..." : "Sign In"}
