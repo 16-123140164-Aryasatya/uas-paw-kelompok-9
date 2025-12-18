@@ -1,0 +1,271 @@
+/* Register Page Container */
+.register-container {
+  @apply flex min-h-screen w-full flex-col lg:flex-row;
+}
+
+.register-left {
+  @apply flex w-full flex-col justify-center px-6 py-12 lg:w-1/2 lg:px-20 xl:px-32 bg-surface-light dark:bg-background-dark;
+}
+
+.register-right {
+  @apply relative hidden w-full lg:block lg:w-1/2;
+}
+
+/* Header / Logo */
+.register-header {
+  @apply flex items-center gap-3 mb-10;
+}
+
+.register-logo {
+  @apply flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary;
+}
+
+.register-logo-icon {
+  @apply text-3xl;
+  font-family: Material Symbols Outlined;
+}
+
+.register-title {
+  @apply text-2xl font-bold tracking-tight text-text-main-light dark:text-text-main-dark;
+}
+
+/* Segmented Control */
+.register-segmented {
+  @apply mb-8 w-full max-w-md;
+}
+
+.register-segmented-control {
+  @apply flex h-12 w-full items-center justify-center rounded-xl bg-background-light dark:bg-surface-dark p-1 border border-border-light dark:border-border-dark;
+}
+
+.register-segmented-button {
+  @apply group flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg px-4 text-sm font-semibold transition-all hover:text-text-main-light dark:hover:text-white text-text-sub-light dark:text-text-sub-dark;
+}
+
+.register-segmented-button-active {
+  @apply group relative flex cursor-pointer h-full flex-1 items-center justify-center rounded-lg bg-white dark:bg-background-dark text-primary shadow-sm ring-1 ring-black/5 dark:ring-white/10 px-4 text-sm font-semibold transition-all;
+}
+
+/* Main Content */
+.register-main-content {
+  @apply max-w-md w-full;
+}
+
+.register-headings {
+  @apply mb-8 space-y-2;
+}
+
+.register-h1 {
+  @apply text-3xl font-extrabold leading-tight tracking-tight text-text-main-light dark:text-white sm:text-4xl;
+}
+
+.register-subtitle {
+  @apply text-base font-normal text-text-sub-light dark:text-text-sub-dark;
+}
+
+/* Form */
+.register-form {
+  @apply space-y-6;
+}
+
+/* Message Alert */
+.register-message {
+  @apply p-4 rounded-lg border;
+}
+
+.register-message-success {
+  @apply bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800;
+}
+
+.register-message-error {
+  @apply bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800;
+}
+
+.register-message-text {
+  @apply text-sm font-medium;
+}
+
+.register-message-text-success {
+  @apply text-green-800 dark:text-green-200;
+}
+
+.register-message-text-error {
+  @apply text-red-800 dark:text-red-200;
+}
+
+/* Role Selector */
+.register-role-section {
+  @apply space-y-3;
+}
+
+.register-role-label {
+  @apply text-sm font-semibold leading-none text-text-main-light dark:text-text-main-dark;
+}
+
+.register-role-grid {
+  @apply grid grid-cols-2 gap-4;
+}
+
+.register-role-option {
+  @apply relative flex cursor-pointer flex-col rounded-xl border border-border-light dark:border-border-dark bg-background-light/50 dark:bg-surface-dark p-4 transition-all hover:bg-primary/5 has-[:checked]:border-primary has-[:checked]:bg-primary/5 has-[:checked]:ring-1 has-[:checked]:ring-primary;
+}
+
+.register-role-option-header {
+  @apply flex justify-between items-start mb-2;
+}
+
+.register-role-option-icon {
+  @apply text-primary;
+  font-family: Material Symbols Outlined;
+}
+
+.register-role-option-radio {
+  @apply sr-only;
+}
+
+.register-role-option-radio-indicator {
+  @apply h-4 w-4 rounded-full border border-primary opacity-0 transition-opacity has-[:checked]:opacity-100 ring-2 ring-primary ring-offset-2 dark:ring-offset-surface-dark bg-primary flex items-center justify-center;
+}
+
+.register-role-option-name {
+  @apply font-bold text-text-main-light dark:text-white;
+}
+
+.register-role-option-desc {
+  @apply text-xs text-text-sub-light dark:text-text-sub-dark mt-1;
+}
+
+/* Input Fields */
+.register-input-section {
+  @apply space-y-4;
+}
+
+.register-input-group {
+  @apply space-y-2;
+}
+
+.register-input-label {
+  @apply text-sm font-semibold leading-none text-text-main-light dark:text-text-main-dark;
+}
+
+.register-input-wrapper {
+  @apply relative;
+}
+
+.register-input {
+  @apply flex h-12 w-full rounded-lg border border-border-light dark:border-border-dark bg-white dark:bg-surface-dark px-4 py-2 text-base text-text-main-light dark:text-white placeholder:text-text-sub-light focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary transition-colors;
+}
+
+.register-input-icon {
+  @apply pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-text-sub-light;
+}
+
+.register-input-icon-element {
+  @apply text-lg;
+  font-family: Material Symbols Outlined;
+}
+
+.register-password-toggle {
+  @apply absolute inset-y-0 right-0 flex items-center pr-3 text-text-sub-light hover:text-text-main-light dark:hover:text-white transition-colors;
+}
+
+.register-password-hint {
+  @apply text-xs text-text-sub-light dark:text-text-sub-dark pt-1 pl-1;
+}
+
+/* Terms & Submit */
+.register-terms-section {
+  @apply space-y-6 pt-2;
+}
+
+.register-terms-checkbox {
+  @apply h-4 w-4 rounded border-border-light text-primary focus:ring-primary dark:border-border-dark dark:bg-surface-dark;
+}
+
+.register-terms-label {
+  @apply flex items-center space-x-2;
+}
+
+.register-terms-text {
+  @apply text-sm font-medium leading-none text-text-sub-light dark:text-text-sub-dark peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+}
+
+.register-terms-link {
+  @apply text-primary hover:underline font-semibold;
+}
+
+.register-submit-button {
+  @apply inline-flex h-12 w-full items-center justify-center whitespace-nowrap rounded-lg bg-primary px-4 py-2 text-base font-bold text-white shadow-md transition-colors hover:bg-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+}
+
+/* Sign In Link */
+.register-signin-section {
+  @apply mt-8 text-center text-sm;
+}
+
+.register-signin-text {
+  @apply text-text-sub-light dark:text-text-sub-dark;
+}
+
+.register-signin-link {
+  @apply font-bold text-primary hover:underline;
+}
+
+/* Right Section Background */
+.register-bg-image {
+  @apply absolute inset-0 h-full w-full object-cover;
+}
+
+.register-bg-overlay {
+  @apply absolute inset-0 bg-gradient-to-t from-background-dark/90 via-background-dark/40 to-transparent;
+}
+
+/* Right Section Content */
+.register-right-content {
+  @apply absolute bottom-0 left-0 right-0 p-12 xl:p-24;
+}
+
+.register-quote {
+  @apply space-y-6 max-w-lg;
+}
+
+.register-quote-badge {
+  @apply rounded-full bg-primary/20 backdrop-blur-sm px-4 py-1 w-fit border border-white/10;
+}
+
+.register-quote-badge-text {
+  @apply text-sm font-semibold text-white tracking-wide uppercase;
+}
+
+.register-quote-text {
+  @apply text-3xl font-bold leading-relaxed text-white;
+}
+
+.register-quote-footer {
+  @apply flex items-center gap-4;
+}
+
+.register-quote-divider {
+  @apply h-px w-8 bg-white/60;
+}
+
+.register-quote-author {
+  @apply text-lg font-medium not-italic text-white/90;
+}
+
+/* Decorative Elements */
+.register-decorative {
+  @apply absolute top-12 right-12 flex gap-2;
+}
+
+.register-decorative-dot {
+  @apply h-3 w-3 rounded-full bg-white/20 backdrop-blur-md;
+}
+
+.register-decorative-dot-2 {
+  @apply h-3 w-3 rounded-full bg-white/40 backdrop-blur-md;
+}
+
+.register-decorative-dot-3 {
+  @apply h-3 w-3 rounded-full bg-white/60 backdrop-blur-md;
+}
