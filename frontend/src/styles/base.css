@@ -2,6 +2,23 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
 :root{
   --bg:#f5f7fb;
   --panel:#ffffff;
@@ -25,18 +42,18 @@
   --radius:16px;
 
   /* Color Variables for Login/Register */
-  --color-primary: #6366f1;
-  --color-primary-hover: #4f46e5;
-  --color-text-main-light: #1f2937;
-  --color-text-main-dark: #f3f4f6;
-  --color-text-sub-light: #6b7280;
-  --color-text-sub-dark: #9ca3af;
-  --color-background-light: #f9fafb;
-  --color-background-dark: #111827;
+  --color-primary: #137fec;
+  --color-primary-hover: #106ac4;
+  --color-text-main-light: #0d141b;
+  --color-text-main-dark: #e0e6ed;
+  --color-text-sub-light: #4c739a;
+  --color-text-sub-dark: #94a3b8;
+  --color-background-light: #f6f7f8;
+  --color-background-dark: #101922;
   --color-surface-light: #ffffff;
-  --color-surface-dark: #1f2937;
-  --color-border-light: #e5e7eb;
-  --color-border-dark: #374151;
+  --color-surface-dark: #1a2632;
+  --color-border-light: #e7edf3;
+  --color-border-dark: #2a3b4d;
 }
 
 *{box-sizing:border-box}
