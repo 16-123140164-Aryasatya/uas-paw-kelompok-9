@@ -16,24 +16,6 @@ export default function Topbar() {
     loc.pathname === "/manage-books" ? "Manage Books" :
     loc.pathname.startsWith("/user") ? "Member Portal" : "Dashboard";
 
-  const getTitleIcon = () => {
-    if (role === "librarian") {
-      if (loc.pathname === "/") return "📊";
-      if (loc.pathname === "/inventory") return "📦";
-      if (loc.pathname === "/requests") return "📬";
-      if (loc.pathname === "/transactions") return "💳";
-      if (loc.pathname === "/members") return "👥";
-      if (loc.pathname === "/manage-books") return "📚";
-    } else {
-      if (loc.pathname === "/user/dashboard") return "🏠";
-      if (loc.pathname === "/user/catalog") return "📚";
-      if (loc.pathname === "/user/borrow") return "📖";
-      if (loc.pathname === "/user/history") return "⏱️";
-      if (loc.pathname === "/user/profile") return "👤";
-    }
-    return "📄";
-  };
-
   const handleLogout = () => {
     if (window.confirm("Anda yakin ingin logout?")) {
       logout();
@@ -60,7 +42,6 @@ export default function Topbar() {
   return (
     <header className="topbar">
       <div style={{ display: "flex", alignItems: "center", gap: "12px", flex: 1 }}>
-        <span style={{ fontSize: "24px" }}>{getTitleIcon()}</span>
         <div className="topTitle" style={{ margin: 0 }}>{title}</div>
       </div>
 
