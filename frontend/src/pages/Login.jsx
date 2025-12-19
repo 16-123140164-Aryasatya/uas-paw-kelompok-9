@@ -200,7 +200,7 @@ export default function Login({ setUser }) {
         <div className="login-right-content">
           <div className="login-quote">
             <div className="login-quote-badge">
-              <span className="login-quote-badge-text">✨ Inspirasi</span>
+              <span className="login-quote-badge-text">Inspirasi</span>
             </div>
             <blockquote className="login-quote-text">
               "Setiap buku adalah pintu menuju dunia baru yang menakjubkan"

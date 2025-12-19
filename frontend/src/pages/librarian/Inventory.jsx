@@ -28,7 +28,12 @@ export default function Inventory() {
       <div className="invHead">
         <div className="invTitle">Inventory</div>
         <div className="invSearch">
-          <span className="invSearchIcon">🔎</span>
+          <span className="invSearchIcon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <path d="m21 21-4.35-4.35"></path>
+            </svg>
+          </span>
           <input
             className="invSearchInput"
             placeholder="Search by title, author, category, or ID..."

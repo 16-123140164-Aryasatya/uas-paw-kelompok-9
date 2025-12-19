@@ -31,8 +31,14 @@
   left: 12px;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 16px;
+  display: flex;
+  align-items: center;
   color: var(--text-secondary);
+}
+
+.invSearchIcon svg {
+  width: 18px;
+  height: 18px;
 }
 
 .invSearchInput {

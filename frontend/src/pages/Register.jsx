@@ -19,7 +19,7 @@ export default function Register({ setUser }) {
     setMessage("");
 
     if (!termsAccepted) {
-      setMessage("⚠️ Anda harus menyetujui syarat dan ketentuan untuk mendaftar.");
+      setMessage("Anda harus menyetujui syarat dan ketentuan untuk mendaftar.");
       return;
     }
 
@@ -216,7 +216,7 @@ export default function Register({ setUser }) {
         <div className="login-right-content">
           <div className="login-quote">
             <div className="login-quote-badge">
-              <span className="login-quote-badge-text">📖 Bergabung</span>
+              <span className="login-quote-badge-text">Bergabung</span>
             </div>
             <blockquote className="login-quote-text">
               "Membaca adalah petualangan tanpa batas"
