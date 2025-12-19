@@ -28,7 +28,12 @@ function TxRow({ title, author, id, borrower, due, status, statusTone, coverTone
       </div>
       <div className="txCell">
         <div className="who">
-          <div className="whoAvatar">👤</div>
+          <div className="whoAvatar">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
           <div className="whoName">{borrower}</div>
         </div>
       </div>
@@ -46,7 +51,12 @@ function BorrowCard({ name, role, time, book, meta, onApprove, onDeny }) {
     <div className="borrowCard">
       <div className="borrowHead">
         <div className="borrowUser">
-          <div className="photo">🧑</div>
+          <div className="photo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </div>
           <div>
             <div className="borrowName">{name}</div>
             <div className="borrowTime">{time}</div>
@@ -64,7 +74,12 @@ function BorrowCard({ name, role, time, book, meta, onApprove, onDeny }) {
       </div>
 
       <div className="borrowActions">
-        <button className="btnSoft btnSoft-green" onClick={onApprove}>✓ Approve</button>
+        <button className="btnSoft btnSoft-green" onClick={onApprove}>
+          <svg className="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          Approve
+        </button>
         <button className="btnSoft btnSoft-red" onClick={onDeny}>Deny</button>
       </div>
     </div>
