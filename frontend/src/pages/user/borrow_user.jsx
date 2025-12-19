@@ -124,21 +124,35 @@ const BorrowUser = () => {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-header">
-            <span className="stat-icon">📚</span>
+            <span className="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+            </span>
             <p className="stat-label">Total Borrowed</p>
           </div>
           <p className="stat-value">{totalBorrowed}</p>
         </div>
         <div className="stat-card stat-warning">
           <div className="stat-header">
-            <span className="stat-icon">⏰</span>
+            <span className="stat-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+            </span>
             <p className="stat-label">Due Soon</p>
           </div>
           <p className="stat-value">{dueSoonCount}</p>
         </div>
         <div className="stat-card stat-danger">
           <div className="stat-header">
-            <span className="stat-icon">⚠️</span>
+            <span className="stat-icon">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+              </svg>
+            </span>
             <p className="stat-label">Overdue</p>
           </div>
           <p className="stat-value">{overdueCount}</p>
