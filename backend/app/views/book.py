@@ -106,8 +106,11 @@ def search_books(request):
 def create_book(request):
     """Create new book (Librarian only)"""
     try:
-        # NOTE: Authentication check is intentionally relaxed to simplify integration
-        # with the frontend. In production, ensure that only librarians can create books.
+        user = get_user_from_token(request)
+        if not user:
+            return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
+        if user.role != UserRole.LIBRARIAN:
+            return Response(json={'success': False, 'message': 'Forbidden: librarian only'}, status=403)
 
         data = request.json_body or {}
 
@@ -197,8 +200,11 @@ def create_book(request):
 def update_book(request):
     """Update book (Librarian only)"""
     try:
-        # NOTE: Authentication check is intentionally relaxed to simplify integration
-        # with the frontend. In production, ensure that only librarians can update books.
+        user = get_user_from_token(request)
+        if not user:
+            return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
+        if user.role != UserRole.LIBRARIAN:
+            return Response(json={'success': False, 'message': 'Forbidden: librarian only'}, status=403)
 
         book_id = request.matchdict['id']
         book = DBSession.query(Book).filter_by(id=book_id).first()
@@ -265,7 +271,11 @@ def update_book(request):
 def delete_book(request):
     """Delete book (any user).  Active borrowings are still protected."""
     try:
-        # NOTE: Authentication check removed to simplify integration.
+        user = get_user_from_token(request)
+        if not user:
+            return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
+        if user.role != UserRole.LIBRARIAN:
+            return Response(json={'success': False, 'message': 'Forbidden: librarian only'}, status=403)
         book_id = request.matchdict['id']
         book = DBSession.query(Book).filter_by(id=book_id).first()
 

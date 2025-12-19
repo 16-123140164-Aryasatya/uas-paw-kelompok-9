@@ -1,7 +1,15 @@
-from sqlalchemy import Column, Integer, ForeignKey, Date, Numeric
+from sqlalchemy import Column, Integer, ForeignKey, Date, Numeric, Enum as SQLEnum
 from sqlalchemy.orm import relationship
 from datetime import datetime, timedelta
 from . import Base
+import enum
+
+
+class BorrowStatus(enum.Enum):
+    PENDING = "pending"
+    ACTIVE = "active"
+    RETURNED = "returned"
+    DENIED = "denied"
 
 class Borrowing(Base):
     __tablename__ = 'borrowings'
@@ -13,6 +21,7 @@ class Borrowing(Base):
     due_date = Column(Date, nullable=False)
     return_date = Column(Date, nullable=True)
     fine = Column(Numeric(10, 2), default=0.0)
+    status = Column(SQLEnum(BorrowStatus), nullable=False, default=BorrowStatus.PENDING)
     
     # Relationships
     book = relationship('Book', back_populates='borrowings')
@@ -23,6 +32,9 @@ class Borrowing(Base):
         # Set due date 14 days from borrow date
         if not self.due_date:
             self.due_date = (self.borrow_date or datetime.now()) + timedelta(days=14)
+        # Default status to PENDING if not provided
+        if not getattr(self, 'status', None):
+            self.status = BorrowStatus.PENDING
     
     def calculate_fine(self, fine_per_day=5000):
         """Calculate late return fine (Rp 5000 per day)"""
@@ -42,6 +54,12 @@ class Borrowing(Base):
         if not self.return_date:
             return datetime.now().date() > self.due_date
         return False
+
+    def resolved_status(self):
+        """Return status considering overdue flag."""
+        if self.status == BorrowStatus.ACTIVE and self.is_overdue():
+            return "overdue"
+        return self.status.value if isinstance(self.status, BorrowStatus) else str(self.status)
     
     def to_dict(self):
         """Convert borrowing object to dictionary"""
@@ -54,5 +72,5 @@ class Borrowing(Base):
             'return_date': self.return_date.isoformat() if self.return_date else None,
             'fine': float(self.fine) if self.fine else 0.0,
             'is_overdue': self.is_overdue(),
-            'status': 'returned' if self.return_date else ('overdue' if self.is_overdue() else 'active')
+            'status': self.resolved_status()
         }

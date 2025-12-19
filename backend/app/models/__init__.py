@@ -11,6 +11,6 @@ Base = declarative_base()
 # Import all models
 from .user import User, UserRole
 from .book import Book
-from .borrowing import Borrowing
+from .borrowing import Borrowing, BorrowStatus
 
-__all__ = ['Base', 'DBSession', 'User', 'UserRole', 'Book', 'Borrowing']
+__all__ = ['Base', 'DBSession', 'User', 'UserRole', 'Book', 'Borrowing', 'BorrowStatus']

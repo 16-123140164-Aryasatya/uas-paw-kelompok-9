@@ -11,7 +11,8 @@ route names and paths.
 from pyramid.view import view_config
 from pyramid.response import Response
 
-from ..models import DBSession, User
+from ..models import DBSession, User, UserRole
+from .auth import get_user_from_token
 
 
 @view_config(route_name='users_list', request_method='GET', renderer='json')
@@ -23,6 +24,12 @@ def list_users(request):
     an array of user objects obtained from ``User.to_dict()``.
     """
     try:
+        user = get_user_from_token(request)
+        if not user:
+            return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
+        if user.role != UserRole.LIBRARIAN:
+            return Response(json={'success': False, 'message': 'Forbidden: librarian only'}, status=403)
+
         users = DBSession.query(User).order_by(User.id).all()
         return Response(
             json={
