@@ -59,18 +59,19 @@
 
 .login-logo {
   display: flex;
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 3.5rem;
+  width: 3.5rem;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
-  background-color: rgba(19, 127, 236, 0.1);
-  color: #137fec;
+  border-radius: 0.75rem;
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .login-logo-icon {
-  font-size: 1.875rem;
-  font-family: Material Symbols Outlined;
+  width: 28px;
+  height: 28px;
+  color: white;
 }
 
 .login-title {
@@ -166,8 +167,8 @@
 
 .login-input:focus {
   outline: none;
-  border-color: #137fec;
-  box-shadow: 0 0 0 3px rgba(19, 127, 236, 0.1);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
 .dark .login-input {
@@ -177,8 +178,8 @@
 }
 
 .dark .login-input:focus {
-  border-color: #137fec;
-  box-shadow: 0 0 0 3px rgba(19, 127, 236, 0.2);
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .login-input:disabled {
@@ -192,10 +193,12 @@
   display: flex;
   align-items: center;
   pointer-events: none;
+  color: #94a3b8;
 }
 
-.login-input-icon-element {
-  font-size: 1.25rem;
+.login-input-icon svg {
+  width: 20px;
+  height: 20px;
 }
 
 /* Password Toggle Button */
@@ -210,11 +213,17 @@
   border: none;
   background: none;
   cursor: pointer;
-  color: inherit;
+  color: #64748b;
+  transition: color 0.2s ease;
+}
+
+.login-password-toggle svg {
+  width: 20px;
+  height: 20px;
 }
 
 .login-password-toggle:hover {
-  opacity: 0.7;
+  color: #2563eb;
 }
 
 /* Remember Section */
@@ -281,15 +290,30 @@
 
 /* Error Message Alert */
 .login-error {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
   background-color: #fee2e2;
   border: 1px solid #fecaca;
   border-radius: 0.5rem;
   padding: 1rem;
 }
 
+.error-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: #dc2626;
+  margin-top: 2px;
+}
+
 .dark .login-error {
   background-color: rgba(127, 29, 29, 0.2);
   border-color: #7f1d1d;
+}
+
+.dark .error-icon {
+  color: #fca5a5;
 }
 
 .login-error.login-success {

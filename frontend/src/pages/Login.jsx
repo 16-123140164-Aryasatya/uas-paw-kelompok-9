@@ -67,9 +67,12 @@ export default function Login({ setUser }) {
       <div className="login-left">
         <div className="login-header">
           <div className="login-logo">
-            <div className="login-logo-icon">📚</div>
+            <svg className="login-logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
           </div>
-          <div className="login-title">Librarizz</div>
+          <div className="login-title">Perpustakaan Digital</div>
         </div>
 
         <div className="login-main-content">
@@ -83,7 +86,10 @@ export default function Login({ setUser }) {
           <form onSubmit={submit} className="login-form">
             {error && (
               <div className="login-error">
-                <p className="login-error-text">⚠️ {error}</p>
+                <svg className="error-icon" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                </svg>
+                <p className="login-error-text">{error}</p>
               </div>
             )}
 
@@ -104,7 +110,10 @@ export default function Login({ setUser }) {
                     disabled={loading}
                   />
                   <div className="login-input-icon">
-                    <span className="login-input-icon-element">✉️</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                      <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
                   </div>
                 </div>
               </div>
@@ -130,9 +139,17 @@ export default function Login({ setUser }) {
                     className="login-password-toggle"
                     tabIndex="-1"
                   >
-                    <span className="login-input-icon-element">
-                      {showPassword ? "👁️" : "👁️‍🗨️"}
-                    </span>
+                    {showPassword ? (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                        <circle cx="12" cy="12" r="3"></circle>
+                      </svg>
+                    ) : (
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                        <line x1="1" y1="1" x2="23" y2="23"></line>
+                      </svg>
+                    )}
                   </button>
                 </div>
               </div>
