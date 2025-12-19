@@ -29,15 +29,17 @@ def seed_database():
     Base.metadata.bind = engine
     Base.metadata.create_all(engine)
     
-    with transaction.manager:
-        # Check if data already exists
-        existing_users = DBSession.query(User).count()
-        if existing_users > 0:
-            print('⚠️  Database already has data. Skipping seed.')
-            return
-        
-        print('🌱 Seeding database...')
-        
+    # Seeding should use explicit commit since DBSession is not
+    # integrated with zope.transaction. Avoid transaction.manager.
+    # Check if data already exists
+    existing_users = DBSession.query(User).count()
+    if existing_users > 0:
+        print('⚠️  Database already has data. Skipping seed.')
+        return
+
+    print('🌱 Seeding database...')
+
+    try:
         # Create Librarian
         librarian = User(
             name='Admin Librarian',
@@ -46,18 +48,18 @@ def seed_database():
         )
         librarian.set_password('librarian123')
         DBSession.add(librarian)
-        
+
         # Create Members
         members = [
             User(name='John Doe', email='john@example.com', role=UserRole.MEMBER),
             User(name='Jane Smith', email='jane@example.com', role=UserRole.MEMBER),
             User(name='Bob Wilson', email='bob@example.com', role=UserRole.MEMBER),
         ]
-        
+
         for member in members:
             member.set_password('member123')
             DBSession.add(member)
-        
+
         # Create Books
         books_data = [
             {
@@ -137,12 +139,20 @@ def seed_database():
         for book_data in books_data:
             book = Book(**book_data)
             DBSession.add(book)
-        
+
+        # Commit all changes explicitly
+        DBSession.commit()
+
         print('✅ Database seeded successfully!')
         print('\n📊 Created:')
         print(f'   - 1 Librarian (email: librarian@library.com, password: librarian123)')
         print(f'   - 3 Members (password: member123 for all)')
         print(f'   - 8 Books in various categories')
+
+    except Exception as e:
+        DBSession.rollback()
+        print(f'❌ Seeding failed: {e}')
+        raise
         
 if __name__ == '__main__':
     seed_database()
