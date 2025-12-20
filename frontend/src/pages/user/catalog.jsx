@@ -2,9 +2,6 @@ import React, { useEffect, useMemo, useState } from "react";
 import BookCover from "../../components/BookCover";
 import "./catalog.css";
 import { Link } from "react-router-dom";
-// Import API helpers from the main src.  Because the ui_user folder lives
-// outside of src, we reference them via a relative path.  These helpers
-// wrap axios and point to the backend defined in .env.
 import { BooksAPI, BorrowAPI } from "../../api/endpoints";
 import { normalizeError } from "../../api/client";
 import { useToast } from "../../components/Toast";

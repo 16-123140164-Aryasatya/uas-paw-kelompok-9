@@ -8,7 +8,6 @@ from datetime import datetime
 
 @view_config(route_name='borrowings_list', request_method='GET', renderer='json')
 def list_borrowings(request):
-    """Get all borrowings. Optionally filter by status."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -48,7 +47,6 @@ def list_borrowings(request):
 
 @view_config(route_name='borrowings_my', request_method='GET', renderer='json')
 def my_borrowings(request):
-    """Get active/pending borrowings for the authenticated user."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -66,7 +64,6 @@ def my_borrowings(request):
 
 @view_config(route_name='borrowings_history', request_method='GET', renderer='json')
 def borrowing_history(request):
-    """Get borrowing history for current user (librarian sees all)."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -86,7 +83,6 @@ def borrowing_history(request):
 
 @view_config(route_name='borrowings_create', request_method='POST', renderer='json')
 def create_borrowing(request):
-    """Create a pending borrow request (member or librarian acting as member)."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -146,7 +142,6 @@ def create_borrowing(request):
 
 @view_config(route_name='borrowings_return', request_method='POST', renderer='json')
 def return_book(request):
-    """Request to return an active borrowing. Sets status to PENDING for librarian approval."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -163,8 +158,6 @@ def return_book(request):
             request.response.status = 400
             return {'success': False, 'message': 'Borrowing already closed'}
         
-        # Member dapat request return saat borrowing ACTIVE, atau librarian saat ACTIVE
-        # Jangan allow return request jika sudah pending (menunggu approval untuk borrow)
         if borrowing.status == BorrowStatus.PENDING:
             request.response.status = 400
             return {'success': False, 'message': 'Borrowing is pending approval - cannot request return yet'}
@@ -173,9 +166,6 @@ def return_book(request):
             request.response.status = 403
             return {'success': False, 'message': 'Forbidden'}
 
-        # Set status to PENDING untuk menandakan return sedang menunggu approval librarian
-        # Tandai tanggal return sekarang agar bisa dibedakan dari borrow pending
-        # dan untuk perhitungan denda menggunakan tanggal request.
         borrowing.status = BorrowStatus.PENDING
         borrowing.return_date = datetime.now().date()
 
@@ -197,7 +187,6 @@ def return_book(request):
 
 @view_config(route_name='borrowings_approve', request_method='POST', renderer='json')
 def approve_borrowing(request):
-    """Librarian approves a pending borrow request and activates it."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -236,7 +225,6 @@ def approve_borrowing(request):
 
 @view_config(route_name='borrowings_deny', request_method='POST', renderer='json')
 def deny_borrowing(request):
-    """Librarian denies a pending borrow request."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -270,7 +258,6 @@ def deny_borrowing(request):
 
 @view_config(route_name='borrowings_approve_return', request_method='POST', renderer='json')
 def approve_return(request):
-    """Librarian approves a return request, marks borrowing as RETURNED and calculates fine."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -283,14 +270,9 @@ def approve_return(request):
         if not borrowing:
             return Response(json={'success': False, 'message': 'Borrowing record not found'}, status=404)
 
-        # Hanya approve return jika status PENDING (return request pending)
-        # dan borrowing original statusnya ACTIVE (bukan borrow request pending)
-        # Tapi karena sekarang PENDING bisa borrow/return, kita harus track di client
-        # Untuk sekarang, asumsi return request hanya bisa dari ACTIVE borrowings
         if borrowing.status != BorrowStatus.PENDING:
             return Response(json={'success': False, 'message': 'No pending return request for this borrowing'}, status=400)
 
-        # Set return_date dan calculate fine
         borrowing.return_date = datetime.now().date()
         borrowing.status = BorrowStatus.RETURNED
         fine = borrowing.calculate_fine()
@@ -318,7 +300,6 @@ def approve_return(request):
 
 @view_config(route_name='borrowings_deny_return', request_method='POST', renderer='json')
 def deny_return(request):
-    """Librarian denies a return request, sets borrowing back to ACTIVE."""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -334,7 +315,6 @@ def deny_return(request):
         if borrowing.status != BorrowStatus.PENDING:
             return Response(json={'success': False, 'message': 'No pending return request for this borrowing'}, status=400)
 
-        # Set kembali ke ACTIVE dan hapus tanggal return (karena request ditolak)
         borrowing.status = BorrowStatus.ACTIVE
         borrowing.return_date = None
 

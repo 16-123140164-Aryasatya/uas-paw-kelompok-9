@@ -5,9 +5,7 @@ import jwt
 from datetime import datetime, timedelta
 
 def create_token(user_id, secret):
-    """Create JWT token"""
     if not secret:
-        # Fallback to a default secret if none provided (should not happen in production)
         secret = 'fallback-secret-key-change-in-production'
     payload = {
         'user_id': user_id,
@@ -16,7 +14,6 @@ def create_token(user_id, secret):
     return jwt.encode(payload, secret, algorithm='HS256')
 
 def get_user_from_token(request):
-    """Get user from JWT token"""
     auth_header = request.headers.get('Authorization')
     if not auth_header or not auth_header.startswith('Bearer '):
         return None
@@ -40,11 +37,9 @@ def get_user_from_token(request):
 
 @view_config(route_name='auth_register', request_method='POST', renderer='json')
 def register(request):
-    """Register new user"""
     try:
         data = request.json_body
         
-        # Validate input
         required_fields = ['name', 'email', 'password']
         for field in required_fields:
             if field not in data or not data[field]:
@@ -53,7 +48,6 @@ def register(request):
                     status=400
                 )
         
-        # Check if email already exists
         existing_user = DBSession.query(User).filter_by(email=data['email']).first()
         if existing_user:
             return Response(
@@ -61,7 +55,6 @@ def register(request):
                 status=400
             )
         
-        # Create new user
         user = User(
             name=data['name'],
             email=data['email'],
@@ -70,14 +63,8 @@ def register(request):
         user.set_password(data['password'])
         
         DBSession.add(user)
-        # Flush and commit the new user to persist it.  Without a
-        # commit the user would only exist in the current transaction
-        # and would not be visible on subsequent requests.
         DBSession.flush()
         DBSession.commit()
-
-        # Create token
-        secret = None
         if hasattr(request, 'registry') and request.registry and hasattr(request.registry, 'settings'):
             secret = request.registry.settings.get('jwt.secret')
         token = create_token(user.id, secret)
@@ -149,7 +136,6 @@ def login(request):
 
 @view_config(route_name='auth_me', request_method='GET', renderer='json')
 def get_me(request):
-    """Get current user info"""
     user = get_user_from_token(request)
     
     if not user:

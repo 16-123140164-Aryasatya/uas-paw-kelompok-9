@@ -1,20 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "./history_borrow.css";
-// Use API helpers from the src folder.  Because ui_user lives outside
-// of src, we import via relative path.  These helpers handle
-// authorization headers and base URL configuration.
 import { BorrowAPI, BooksAPI } from "../../api/endpoints";
 import { normalizeError } from "../../api/client";
 import { useToast } from "../../components/Toast";
+import BookCover from "../../components/BookCover";
 
-/**
- * HistoryBorrow renders the borrowing history for the current user.  It
- * pulls data from the backend via /api/borrowings/history and
- * /api/books to join book details with borrowing records.  Users can
- * search and filter by status, and return currently borrowed books
- * directly from this page.  Summary stats show total borrowed books,
- * active/overdue loans and estimated unpaid fines.
- */
 const HistoryBorrow = () => {
   const toast = useToast();
   const [history, setHistory] = useState([]);
@@ -73,7 +63,8 @@ const HistoryBorrow = () => {
   const enriched = useMemo(() => {
     const now = new Date();
     return history.map((br) => {
-      const book = bookMap[br.book_id] || {};
+      // Backend sudah mengirim data buku lengkap di br.book
+      const book = br.book || bookMap[br.book_id] || {};
       const borrowDate = br.borrow_date ? new Date(br.borrow_date) : null;
       const dueDate = br.due_date ? new Date(br.due_date) : null;
       const returnDate = br.return_date ? new Date(br.return_date) : null;
@@ -96,10 +87,10 @@ const HistoryBorrow = () => {
       }
       return {
         id: br.id,
-        bookId: br.book_id,
-        title: book.title || br.book_id,
-        author: book.author || "",
-        coverUrl: "",
+        bookId: book.id || br.book_id,
+        title: book.title || "Unknown Book",
+        author: book.author || "-",
+        coverUrl: book.cover_image || "",
         borrowDate: borrowDate ? borrowDate.toLocaleDateString() : "-",
         dueDate: dueDate ? dueDate.toLocaleDateString() : "-",
         returnDate: returnDate ? returnDate.toLocaleDateString() : "-",
@@ -303,10 +294,7 @@ const HistoryBorrow = () => {
                   return (
                     <tr key={item.id}>
                       <td>
-                        <div
-                          className="book-cover"
-                          style={{ backgroundImage: item.coverUrl ? `url(${item.coverUrl})` : undefined }}
-                        />
+                        <BookCover src={item.coverUrl} size="xs" alt={item.title} />
                       </td>
                       <td>
                         <div className="book-info">

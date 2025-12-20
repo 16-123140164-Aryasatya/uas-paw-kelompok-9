@@ -9,7 +9,6 @@ from datetime import datetime
 
 @view_config(route_name='books_list', request_method='GET', renderer='json')
 def list_books(request):
-    """Get all books with optional filters"""
     try:
         # Get query parameters
         category = request.params.get('category')
@@ -42,7 +41,6 @@ def list_books(request):
 
 @view_config(route_name='books_detail', request_method='GET', renderer='json')
 def get_book(request):
-    """Get book by ID"""
     try:
         book_id = request.matchdict['id']
         book = DBSession.query(Book).filter_by(id=book_id).first()
@@ -69,7 +67,6 @@ def get_book(request):
 
 @view_config(route_name='books_search', request_method='GET', renderer='json')
 def search_books(request):
-    """Search books by title, author, or category"""
     try:
         search_query = request.params.get('q', '').strip()
         
@@ -104,10 +101,8 @@ def search_books(request):
 
 @view_config(route_name='books_create', request_method='POST', renderer='json')
 def create_book(request):
-    """Create new book (Librarian only)"""
     try:
-        # NOTE: Authentication check is intentionally relaxed to simplify integration
-        # with the fro        user = get_user_from_token(request)
+        user = get_user_from_token(request)
         if not user:
             return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
         if user.role != UserRole.LIBRARIAN:
@@ -167,14 +162,6 @@ def create_book(request):
         )
 
         DBSession.add(book)
-        # Persist the new book immediately.  ``flush`` writes the
-        # pending changes to the database but does not commit the
-        # transaction.  Without an explicit commit here (or a transaction
-        # manager such as ``pyramid_tm``) the new record would only be
-        # visible within this request and would be rolled back at the
-        # end.  Committing after a successful flush ensures the book is
-        # saved to the PostgreSQL database and available on subsequent
-        # requests.
         DBSession.flush()
         DBSession.commit()
 
@@ -199,7 +186,6 @@ def create_book(request):
 
 @view_config(route_name='books_update', request_method='PUT', renderer='json')
 def update_book(request):
-    """Update book (Librarian only)"""
     try:
         user = get_user_from_token(request)
         if not user:
@@ -270,13 +256,21 @@ def update_book(request):
 
 @view_config(route_name='books_delete', request_method='DELETE', renderer='json')
 def delete_book(request):
-    """Delete book (any user).  Active borrowings are still protected."""
     try:
         user = get_user_from_token(request)
         if not user:
             return Response(json={'success': False, 'message': 'Unauthorized'}, status=401)
         if user.role != UserRole.LIBRARIAN:
             return Response(json={'success': False, 'message': 'Forbidden: librarian only'}, status=403)
+
+        book_id = request.matchdict['id']
+        book = DBSession.query(Book).filter_by(id=book_id).first()
+
+        if not book:
+            return Response(
+                json={'success': False, 'message': 'Book not found'},
+                status=404
+            )
 
         # Do not delete if there are active borrowings
         from ..models import Borrowing

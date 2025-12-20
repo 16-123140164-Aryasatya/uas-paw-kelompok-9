@@ -29,40 +29,33 @@ class Borrowing(Base):
     
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # Set due date 14 days from borrow date
         if not self.due_date:
             self.due_date = (self.borrow_date or datetime.now()) + timedelta(days=14)
-        # Default status to PENDING if not provided
         if not getattr(self, 'status', None):
             self.status = BorrowStatus.PENDING
     
     def calculate_fine(self, fine_per_day=5000):
-        """Calculate late return fine (Rp 5000 per day)"""
         if self.return_date and self.return_date > self.due_date:
             late_days = (self.return_date - self.due_date).days
             self.fine = late_days * fine_per_day
             return self.fine
         elif not self.return_date and datetime.now().date() > self.due_date:
-            # Still not returned and overdue
             late_days = (datetime.now().date() - self.due_date).days
             self.fine = late_days * fine_per_day
             return self.fine
         return 0
     
     def is_overdue(self):
-        """Check if borrowing is overdue"""
         if not self.return_date:
             return datetime.now().date() > self.due_date
         return False
 
     def resolved_status(self):
-        """Return status considering overdue flag."""
         if self.status == BorrowStatus.ACTIVE and self.is_overdue():
             return "overdue"
         return self.status.value if isinstance(self.status, BorrowStatus) else str(self.status)
     
     def to_dict(self):
-        """Convert borrowing object to dictionary"""
         return {
             'id': self.id,
             'book': self.book.to_dict() if self.book else None,

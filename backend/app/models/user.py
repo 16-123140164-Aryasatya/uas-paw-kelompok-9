@@ -21,15 +21,12 @@ class User(Base):
     borrowings = relationship('Borrowing', back_populates='member', cascade='all, delete-orphan')
     
     def set_password(self, password):
-        """Hash password menggunakan bcrypt"""
         self.password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     
     def check_password(self, password):
-        """Verify password"""
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
     
     def to_dict(self):
-        """Convert user object to dictionary - core fields only (spec compliance)"""
         return {
             'id': self.id,
             'name': self.name,

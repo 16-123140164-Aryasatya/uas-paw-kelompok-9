@@ -19,7 +19,6 @@ class Book(Base):
     borrowings = relationship('Borrowing', back_populates='book', cascade='all, delete-orphan')
     
     def to_dict(self):
-        """Convert book object to dictionary"""
         return {
             'id': self.id,
             'title': self.title,
@@ -34,18 +33,15 @@ class Book(Base):
         }
     
     def is_available_to_borrow(self):
-        """Check if book can be borrowed"""
         return self.copies_available > 0
     
     def decrease_available(self):
-        """Decrease available copies when borrowed"""
         if self.copies_available > 0:
             self.copies_available -= 1
             return True
         return False
     
     def increase_available(self):
-        """Increase available copies when returned"""
         if self.copies_available < self.copies_total:
             self.copies_available += 1
             return True
