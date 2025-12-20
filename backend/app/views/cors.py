@@ -19,6 +19,4 @@ def options_view(request):
     returns a 200 OK response without any body. CORS headers are set via
     a ``NewResponse`` subscriber in the application setup.
     """
-    response= Response(status=200)
-    response.test= ''
-    return response
+    Return Response(status=200)
