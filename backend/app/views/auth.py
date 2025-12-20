@@ -35,7 +35,7 @@ def get_user_from_token(request):
     except:
         return None
 
-@view_config(route_name='auth_register', request_method=('POST', 'OPTIONS'), renderer='json')
+@view_config(route_name='auth_register', request_method='POST', renderer='json')
 def register(request):
     try:
         data = request.json_body
@@ -88,7 +88,7 @@ def register(request):
             status=500
         )
 
-@view_config(route_name='auth_login', request_method=('POST', 'OPTIONS'), renderer='json')
+@view_config(route_name='auth_login', request_method='POST', renderer='json')
 def login(request):
     """Login user"""
     try:
