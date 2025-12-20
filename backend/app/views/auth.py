@@ -35,7 +35,7 @@ def get_user_from_token(request):
     except:
         return None
 
-@view_config(route_name='auth_register', request_method='POST', renderer='json')
+@view_config(route_name='auth_register', request_method=('POST', 'OPTIONS'), renderer='json')
 def register(request):
     try:
         data = request.json_body
