@@ -191,9 +191,9 @@ Frontend akan berjalan di `http://localhost:5173`
 
 ## Link Deployment
 
-- **Frontend (Vercel):** [https://[project-name].vercel.app](https://uas-paw-kelompok-9-librarizz.vercel.app/)
-- **Backend (Domain):** [https://[domain-name].web.id](huas-paw-kelompok-9-production.up.railway.app)
-- **Video Presentasi:** [Link YouTube/Google Drive - To be added]
+- **Frontend (Vercel):** https://[project-name].vercel.app](https://uas-paw-kelompok-9-librarizz.vercel.app/
+- **Backend (Domain):** https://[domain-name].web.id](huas-paw-kelompok-9-production.up.railway.app
+- **Video Presentasi:** https://s.itera.id/presentasi-kelompok9-pawRB
 
 ---
 
