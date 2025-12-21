@@ -388,7 +388,7 @@ Alur librarian: mengelola stok/CRUD buku, menyetujui/menolak pinjaman, memproses
 
 ## Video Presentasi
 
-**Link Video:** [YouTube/Google Drive - To be added]
+**Link Video:** https://s.itera.id/presentasi-kelompok9-pawRB
 
 ---
 
